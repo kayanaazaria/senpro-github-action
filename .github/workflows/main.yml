@@ -1,35 +1,35 @@
 name: Test, Build, and Deploy | Modul 01 - Lab2.2 Senior Project
-
+ 
 on:
   push:
     branches: [main]
-
+ 
 jobs:
   test-build:
     runs-on: ubuntu-latest
-
+ 
     strategy:
       matrix:
         node-version: [16.x]
-    
+ 
     steps:
       - uses: actions/checkout@v4
       - name: Testing Build pre-Deploy
         uses: actions/setup-node@v4
-        with: 
+        with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm i
       - run: npm run build
-      
+ 
   deploy:
     needs: test-build
     runs-on: ubuntu-latest
-
+ 
     strategy:
       matrix:
         node-version: [16.x]
-    
+ 
     steps:
       - name: Build app on VM
         uses: appleboy/ssh-action@master
@@ -48,6 +48,7 @@ jobs:
                 mkdir -p ~/senpro/521475/modul02;
                 cd ~/senpro/521475/modul02;
                 git clone https://github.com/kayanaazaria/senpro-github-action.git;
+                cd ~/senpro/521475/modul02/senpro-github-action;
                 echo "Install Package dan Build Project";
                 npm install;
                 npm run build;
